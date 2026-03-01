@@ -1,0 +1,24 @@
+{
+  "experiment": {
+    "architecture": "parallel",
+    "dataset_type": "implicit",
+    "save_interval": 70,
+    "num_iterations": 4,
+    "max_questions": null,
+    "start_index": 0,
+    "seed": 42,
+    "dry_run": false
+  },
+  "model": {
+    "model_name": "gpt-4o-mini",
+    "api_key_env": "OPENAI_API_KEY",
+    "base_url": "https://api.openai.com/v1",
+    "max_retries": 20,
+    "retry_wait_seconds": 1,
+    "timeout_seconds": 120
+  },
+  "paths": {
+    "data_dir": "data",
+    "output_dir": "outputs"
+  }
+}
