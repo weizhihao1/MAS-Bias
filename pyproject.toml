@@ -1,0 +1,16 @@
+[project]
+name = "mas-bias"
+version = "0.1.0"
+description = "Open-source experiment scripts for bias amplification in multi-agent systems"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy",
+  "openai",
+  "pandas",
+  "scipy",
+  "tqdm",
+]
+
+[tool.uv]
+package = false

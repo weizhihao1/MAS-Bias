@@ -2,17 +2,35 @@
 
 # 🤖 Aligned Agents, Biased Swarm: Measuring Bias Amplification in Multi-Agent Systems
 
-[![Paper](https://img.shields.io/badge/Paper-ArXiv-red?style=for-the-badge)](https://github.com/weizhihao1/MAS-Bias)
-[![HuggingFace](https://img.shields.io/badge/HuggingFace-Dataset-yellow?style=for-the-badge&logo=huggingface&logoColor=black)](https://github.com/weizhihao1/MAS-Bias)
+<p><em>Official code, paper, and released artifacts for ICLR 2026.</em></p>
+
+[![Paper](https://img.shields.io/badge/Paper-PDF-red?style=for-the-badge)](./_ICLR26__Bias.pdf)
+[![HuggingFace](https://img.shields.io/badge/HuggingFace-Dataset-yellow?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/datasets/weizhihao1/Discrim-Eval-Open)
 [![Code](https://img.shields.io/badge/Code-GitHub-black?style=for-the-badge&logo=github)](https://github.com/weizhihao1/MAS-Bias)
 
 <p align="center">
   <a href="./README.md">English</a> | <a href="./README_zh.md">简体中文</a>
 </p>
 
+<p>
+  <a href="#-recent-news">Recent News</a> •
+  <a href="#-abstract">Abstract</a> •
+  <a href="#-project-overview">Overview</a> •
+  <a href="#-run-experiments">Run</a> •
+  <a href="#-paper-setting--script-mapping">Mapping</a> •
+  <a href="#-star-history">Star History</a>
+</p>
+
 </div>
 
-## 🔥 Abstract
+## 🔥 Recent News
+
+- **February 2026**: We are excited to announce that our paper has been accepted to **ICLR 2026**.
+- **March 2026**: We are excited to announce the full open-source release, including:
+  - GitHub repository (this codebase)
+  - Hugging Face dataset: https://huggingface.co/datasets/weizhihao1/Discrim-Eval-Open
+
+## 📖 Abstract
 
 Large language model (LLM) systems are moving from single-agent pipelines to collaborative multi-agent systems (MAS). While individual models are increasingly aligned, this repository studies an important system-level question: **does collaboration reduce bias, or amplify it?**
 
@@ -22,164 +40,141 @@ We introduce an open-ended benchmark setting (three-way comparative choices acro
   <img src="assets/teaser0_1.png" alt="Teaser: Bias amplification in MAS" width="900">
 </p>
 
+## 📦 Project Overview
 
+| Component | Description |
+| --- | --- |
+| Paper | `_ICLR26__Bias.pdf` |
+| Code | `mas-bias/` (all experiment scripts) |
+| Dataset | `data/` (`implicit_prompts.json`, `explicit_prompts.json`) |
+| Configs | `configs/*.env` |
+| Launcher | `run_experiment.sh` |
+| Results | `results/` |
 
-## 🧪 Method Overview 
+## 📁 Repository Structure
 
-### 1) Benchmark formulation
-
-Instead of binary yes/no judgments, each question provides **three demographically distinct protagonists (A/B/C)**. Agents must output a probability distribution over choices and a textual rationale.
-
-- Dataset files:
-  - `data/implicit_prompts.json`
-  - `data/explicit_prompts.json`
-
-### 2) Metrics
-
-For each agent output distribution, we compute:
-
-- **Gini coefficient** (main polarization metric)
-- Variance
-- Entropy
-- KL divergence to uniform distribution
-
-### 3) Architectures evaluated
-
-- Sequential chain baselines (`linear_*`)
-- Topology variants (`parallel`, `spindle`)
-- Depth/iteration setting (`iteration`, repeated fully-connected unit)
-
-## 📊 Experimental Figures
-
-### Benchmark distribution
-
-<p align="center">
-  <img src="assets/bench_distribution.png" alt="Benchmark Distribution" width="860">
-</p>
-
-### Main results figure (part 1)
-
-<p align="center">
-  <img src="assets/1.png" alt="Main Results 1" width="860">
-</p>
-
-### Main results figure (part 2)
-
-<p align="center">
-  <img src="assets/2.png" alt="Main Results 2" width="860">
-</p>
-
-### Trigger vulnerability / perturbation case
-
-<p align="center">
-  <img src="assets/final.png" alt="Trigger Vulnerability" width="860">
-</p>
-
-## 🚀 Quick Start
-
-### 1) Create conda environment
-
-Create a conda environment and install Python dependencies:
-
-```bash
-conda create -n mas-bias python=3.11
-conda activate mas-bias
-pip install -r requirements.txt
+```text
+MAS-Bias/
+├── _ICLR26__Bias.pdf
+├── assets/
+│   └── teaser0_1.png
+├── configs/
+│   ├── linear_plain.env
+│   ├── linear_persona.env
+│   ├── linear_function.env
+│   ├── linear_mix.env
+│   ├── spindle.env
+│   ├── parallel.env
+│   ├── ffn.env
+│   ├── iteration.env
+│   └── different_model.env
+├── data/
+│   ├── implicit_prompts.json
+│   └── explicit_prompts.json
+├── mas-bias/
+│   ├── runtime_config.py
+│   ├── linear_plain.py
+│   ├── linear_persona.py
+│   ├── linear_function.py
+│   ├── linear_mix.py
+│   ├── spindle.py
+│   ├── parallel.py
+│   ├── ffn.py
+│   ├── iteration.py
+│   └── different_model.py
+├── results/
+├── pyproject.toml
+├── environment.yml
+├── requirements.txt
+├── run_experiment.sh
+├── README.md
+└── README_zh.md
 ```
 
-### 2) Configure API key
+## 🧪 Environment Setup
+
+### Option A: UV (project name: `mas-bias`)
+
+```bash
+uv sync
+source .venv/bin/activate
+```
+
+### Option B: Conda (env name: `mas-bias`)
+
+```bash
+conda env create -f environment.yml
+conda activate mas-bias
+```
+
+## ⚙️ Configuration and Credentials
+
+Edit `configs/*.env` directly for each setup:
+
+- `MODEL_NAME`: model identifier (single-model settings)
+- `API_KEY_ENV`: env var name holding your API key
+- `BASE_URL`: optional API base URL
+- `DATASET_TYPE`: `implicit` or `explicit`
+- `MIXED_AGENT_MODELS_JSON`: per-agent model mapping (`different_model` only)
+
+Set API key before running:
 
 ```bash
 export OPENAI_API_KEY="your_api_key_here"
 ```
 
-Or set any custom environment variable and pass it by CLI:
+## 🚀 Run Experiments
+
+List all configurations:
 
 ```bash
-python run_experiment.py --api-key-env YOUR_KEY_ENV
+./run_experiment.sh --list
 ```
 
-### 3) Run with default config
+Run one setting:
 
 ```bash
-python run_experiment.py --config configs/default.json
+./run_experiment.sh linear_plain
 ```
 
-### 4) Common run examples
+Override parameters without editing files:
 
 ```bash
-# Persona chain on implicit set
-python run_experiment.py \
-  --architecture linear_persona \
-  --dataset-type implicit \
-  --model-name gpt-4o-mini
-
-# Iterative architecture with 4 units
-python run_experiment.py \
-  --architecture iteration \
-  --num-iterations 4 \
-  --dataset-type implicit
-
-# Dry run (no API call), useful for pipeline sanity checks
-python run_experiment.py \
-  --dry-run \
-  --max-questions 5 \
-  --save-interval 1
+./run_experiment.sh linear_persona DATASET_TYPE=explicit MODEL_NAME=gpt-4o-mini
 ```
 
-### 5) Useful CLI options
+## 🧭 Paper Setting ↔ Script Mapping
 
-```bash
-python run_experiment.py --help
-```
+| Paper Item | Config | Script |
+| --- | --- | --- |
+| Figure 5(a) | `linear_plain` | `mas-bias/linear_plain.py` |
+| Figure 5(b) | `linear_persona` | `mas-bias/linear_persona.py` |
+| Figure 5(c) | `linear_function` | `mas-bias/linear_function.py` |
+| Figure 5(d) | `linear_mix` | `mas-bias/linear_mix.py` |
+| Figure 6(a) | `spindle` | `mas-bias/spindle.py` |
+| Figure 6(b) | `parallel` | `mas-bias/parallel.py` |
+| Figure 6(c) | `ffn` | `mas-bias/ffn.py` |
+| Figure 6(d) | `iteration` | `mas-bias/iteration.py` |
+| Table 1 | `different_model` | `mas-bias/different_model.py` |
 
-Key options include:
+## 📊 Output Locations
 
-- `--architecture`
-- `--dataset-type`
-- `--model-name`
-- `--base-url`
-- `--api-key-env`
-- `--num-iterations`
-- `--save-interval`
-- `--max-questions`
-- `--data-dir`
-- `--output-dir`
+Each run writes progress CSV files to one result folder (at repo root):
 
-## 📁 Project Structure
+- `linear_plain_results/`
+- `linear_persona_results/`
+- `linear_function_results/`
+- `linear_mix_results/`
+- `spindle_results/`
+- `parallel_results/`
+- `ffn_results/`
+- `iteration_results/`
+- `different_results/`
 
-```text
-MAS-Bias/
-├── assets/
-├── configs/
-│   └── default.json
-├── data/
-│   ├── explicit_prompts.json
-│   └── implicit_prompts.json
-├── mas_bias/
-│   ├── cli.py
-│   ├── config.py
-│   ├── constants.py
-│   ├── metrics.py
-│   ├── parsing.py
-│   ├── prompts.py
-│   └── runner.py
-├── environment.yml
-├── run_experiment.py
-├── requirements.txt
-└── README.md
-```
+## 🤗 Dataset
 
-## 📦 Output Files
-
-Each run creates a timestamped folder under `outputs/`, containing:
-
-- `run_config.json`
-- `*_question_metrics_progress_*.csv`
-- `*_avg_metrics_progress_*.csv`
-- `*_responses_progress_*.csv`
-- `*_responses_progress_*.json`
-
+- Hugging Face: https://huggingface.co/datasets/weizhihao1/Discrim-Eval-Open
+- Local JSON: `data/implicit_prompts.json`, `data/explicit_prompts.json`
 
 ## ⭐ Star History
 
@@ -187,7 +182,7 @@ Each run creates a timestamped folder under `outputs/`, containing:
 
 ## Citation
 
-If you find this project useful, please cite the paper:
+If you find this project useful, please cite:
 
 ```bibtex
 @article{li2026agencybench,

@@ -2,17 +2,35 @@
 
 # 🤖 Aligned Agents, Biased Swarm：多智能体系统中的偏见放大测量
 
-[![Paper](https://img.shields.io/badge/Paper-ArXiv-red?style=for-the-badge)](https://github.com/weizhihao1/MAS-Bias)
-[![HuggingFace](https://img.shields.io/badge/HuggingFace-Dataset-yellow?style=for-the-badge&logo=huggingface&logoColor=black)](https://github.com/weizhihao1/MAS-Bias)
+<p><em>ICLR 2026 论文配套代码、数据与开放实验产物。</em></p>
+
+[![Paper](https://img.shields.io/badge/Paper-PDF-red?style=for-the-badge)](./_ICLR26__Bias.pdf)
+[![HuggingFace](https://img.shields.io/badge/HuggingFace-Dataset-yellow?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/datasets/weizhihao1/Discrim-Eval-Open)
 [![Code](https://img.shields.io/badge/Code-GitHub-black?style=for-the-badge&logo=github)](https://github.com/weizhihao1/MAS-Bias)
 
 <p align="center">
   <a href="./README.md">English</a> | <a href="./README_zh.md">简体中文</a>
 </p>
 
+<p>
+  <a href="#-recent-news">Recent News</a> •
+  <a href="#-摘要">摘要</a> •
+  <a href="#-项目概览">概览</a> •
+  <a href="#-运行实验">运行</a> •
+  <a href="#-论文设定--脚本映射">映射</a> •
+  <a href="#-star-history">Star History</a>
+</p>
+
 </div>
 
-## 🔥 摘要
+## 🔥 Recent News
+
+- **2026 年 2 月**：我们非常激动地宣布，论文已被 **ICLR 2026** 正式接收。
+- **2026 年 3 月**：我们非常激动地宣布项目已彻底开源，包括：
+  - GitHub 代码仓库（本仓库）
+  - Hugging Face 数据集：https://huggingface.co/datasets/weizhihao1/Discrim-Eval-Open
+
+## 📖 摘要
 
 大语言模型（LLM）系统正在从单智能体流水线转向协作式多智能体系统（MAS）。尽管单个模型越来越“对齐”，本仓库关注一个关键的系统级问题：**协作会降低偏见，还是放大偏见？**
 
@@ -22,164 +40,141 @@
   <img src="assets/teaser0_1.png" alt="MAS 偏见放大示意图" width="900">
 </p>
 
+## 📦 项目概览
 
+| 组件 | 说明 |
+| --- | --- |
+| 论文 | `_ICLR26__Bias.pdf` |
+| 代码 | `mas-bias/`（全部实验脚本） |
+| 数据 | `data/`（`implicit_prompts.json`、`explicit_prompts.json`） |
+| 配置 | `configs/*.env` |
+| 启动脚本 | `run_experiment.sh` |
+| 结果文件 | `results/` |
 
-## 🧪 方法概览
+## 📁 仓库结构
 
-### 1) 基准构建
-
-不同于二元 yes/no 判断，每个问题提供 **三个具有不同人口属性的候选人（A/B/C）**。智能体需要输出对三者的概率分布与文本理由。
-
-- 数据文件：
-  - `data/implicit_prompts.json`
-  - `data/explicit_prompts.json`
-
-### 2) 指标
-
-对于每个智能体输出分布，我们计算：
-
-- **Gini 系数**（主要极化指标）
-- 方差
-- 熵
-- 相对于均匀分布的 KL 散度
-
-### 3) 评估架构
-
-- 序列链式基线（`linear_*`）
-- 拓扑变体（`parallel`、`spindle`）
-- 深度/迭代设置（`iteration`，重复全连接单元）
-
-## 📊 实验图示
-
-### 基准分布
-
-<p align="center">
-  <img src="assets/bench_distribution.png" alt="基准分布" width="860">
-</p>
-
-### 主结果图（Part 1）
-
-<p align="center">
-  <img src="assets/1.png" alt="主结果图 1" width="860">
-</p>
-
-### 主结果图（Part 2）
-
-<p align="center">
-  <img src="assets/2.png" alt="主结果图 2" width="860">
-</p>
-
-### 触发脆弱性 / 扰动案例
-
-<p align="center">
-  <img src="assets/final.png" alt="触发脆弱性" width="860">
-</p>
-
-## 🚀 快速开始
-
-### 1) 创建 conda 环境
-
-创建 conda 环境并安装 Python 依赖：
-
-```bash
-conda create -n mas-bias python=3.11
-conda activate mas-bias
-pip install -r requirements.txt
+```text
+MAS-Bias/
+├── _ICLR26__Bias.pdf
+├── assets/
+│   └── teaser0_1.png
+├── configs/
+│   ├── linear_plain.env
+│   ├── linear_persona.env
+│   ├── linear_function.env
+│   ├── linear_mix.env
+│   ├── spindle.env
+│   ├── parallel.env
+│   ├── ffn.env
+│   ├── iteration.env
+│   └── different_model.env
+├── data/
+│   ├── implicit_prompts.json
+│   └── explicit_prompts.json
+├── mas-bias/
+│   ├── runtime_config.py
+│   ├── linear_plain.py
+│   ├── linear_persona.py
+│   ├── linear_function.py
+│   ├── linear_mix.py
+│   ├── spindle.py
+│   ├── parallel.py
+│   ├── ffn.py
+│   ├── iteration.py
+│   └── different_model.py
+├── results/
+├── pyproject.toml
+├── environment.yml
+├── requirements.txt
+├── run_experiment.sh
+├── README.md
+└── README_zh.md
 ```
 
-### 2) 配置 API Key
+## 🧪 环境构建
+
+### 方式 A：UV（项目名：`mas-bias`）
+
+```bash
+uv sync
+source .venv/bin/activate
+```
+
+### 方式 B：Conda（环境名：`mas-bias`）
+
+```bash
+conda env create -f environment.yml
+conda activate mas-bias
+```
+
+## ⚙️ 配置与密钥
+
+每个实验可直接修改 `configs/*.env`：
+
+- `MODEL_NAME`：模型名称（单模型设定）
+- `API_KEY_ENV`：API Key 对应的环境变量名
+- `BASE_URL`：可选 API Base URL
+- `DATASET_TYPE`：`implicit` 或 `explicit`
+- `MIXED_AGENT_MODELS_JSON`：按 agent 指定模型（仅 `different_model`）
+
+运行前请先设置 API Key：
 
 ```bash
 export OPENAI_API_KEY="your_api_key_here"
 ```
 
-或使用自定义环境变量，并通过 CLI 传入：
+## 🚀 运行实验
+
+查看全部可运行配置：
 
 ```bash
-python run_experiment.py --api-key-env YOUR_KEY_ENV
+./run_experiment.sh --list
 ```
 
-### 3) 使用默认配置运行
+运行某个设定：
 
 ```bash
-python run_experiment.py --config configs/default.json
+./run_experiment.sh linear_plain
 ```
 
-### 4) 常用运行示例
+临时覆盖参数（无需修改配置文件）：
 
 ```bash
-# Persona 链式架构 + implicit 数据集
-python run_experiment.py \
-  --architecture linear_persona \
-  --dataset-type implicit \
-  --model-name gpt-4o-mini
-
-# Iterative 架构，4 个迭代单元
-python run_experiment.py \
-  --architecture iteration \
-  --num-iterations 4 \
-  --dataset-type implicit
-
-# Dry run（不调用 API），用于流程连通性检查
-python run_experiment.py \
-  --dry-run \
-  --max-questions 5 \
-  --save-interval 1
+./run_experiment.sh linear_persona DATASET_TYPE=explicit MODEL_NAME=gpt-4o-mini
 ```
 
-### 5) 实用 CLI 选项
+## 🧭 论文设定 ↔ 脚本映射
 
-```bash
-python run_experiment.py --help
-```
+| 论文结果 | 配置名 | 脚本 |
+| --- | --- | --- |
+| Figure 5(a) | `linear_plain` | `mas-bias/linear_plain.py` |
+| Figure 5(b) | `linear_persona` | `mas-bias/linear_persona.py` |
+| Figure 5(c) | `linear_function` | `mas-bias/linear_function.py` |
+| Figure 5(d) | `linear_mix` | `mas-bias/linear_mix.py` |
+| Figure 6(a) | `spindle` | `mas-bias/spindle.py` |
+| Figure 6(b) | `parallel` | `mas-bias/parallel.py` |
+| Figure 6(c) | `ffn` | `mas-bias/ffn.py` |
+| Figure 6(d) | `iteration` | `mas-bias/iteration.py` |
+| Table 1 | `different_model` | `mas-bias/different_model.py` |
 
-关键参数包括：
+## 📊 输出结果位置
 
-- `--architecture`
-- `--dataset-type`
-- `--model-name`
-- `--base-url`
-- `--api-key-env`
-- `--num-iterations`
-- `--save-interval`
-- `--max-questions`
-- `--data-dir`
-- `--output-dir`
+每次运行会在仓库根目录生成对应结果目录（CSV 进度文件）：
 
-## 📁 项目结构
+- `linear_plain_results/`
+- `linear_persona_results/`
+- `linear_function_results/`
+- `linear_mix_results/`
+- `spindle_results/`
+- `parallel_results/`
+- `ffn_results/`
+- `iteration_results/`
+- `different_results/`
 
-```text
-MAS-Bias/
-├── assets/
-├── configs/
-│   └── default.json
-├── data/
-│   ├── explicit_prompts.json
-│   └── implicit_prompts.json
-├── mas_bias/
-│   ├── cli.py
-│   ├── config.py
-│   ├── constants.py
-│   ├── metrics.py
-│   ├── parsing.py
-│   ├── prompts.py
-│   └── runner.py
-├── environment.yml
-├── run_experiment.py
-├── requirements.txt
-└── README.md
-```
+## 🤗 数据集
 
-## 📦 输出文件
-
-每次运行会在 `outputs/` 下生成带时间戳的目录，包含：
-
-- `run_config.json`
-- `*_question_metrics_progress_*.csv`
-- `*_avg_metrics_progress_*.csv`
-- `*_responses_progress_*.csv`
-- `*_responses_progress_*.json`
-
+- Hugging Face：https://huggingface.co/datasets/weizhihao1/Discrim-Eval-Open
+- 本地 JSON：`data/implicit_prompts.json`、`data/explicit_prompts.json`
 
 ## ⭐ Star History
 
@@ -187,7 +182,7 @@ MAS-Bias/
 
 ## Citation
 
-如果你觉得这个项目有帮助，请引用论文：
+如果你觉得这个项目有帮助，请引用：
 
 ```bibtex
 @article{li2026agencybench,
